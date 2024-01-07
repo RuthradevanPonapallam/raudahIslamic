@@ -1,55 +1,93 @@
 <template>
   <q-page class="q-pa-md">
     <div class="q-py-md">
-      <q-card class="q-pa-md row" style="background-color: #f9f6f2;">
-        <iframe id="iframe" title="prayerWidget" class="widget-m-top q-ma-sm"
-          style=" height: 358px; border: 1px solid #ddd;" scrolling="no"
-          src="https://www.islamicfinder.org/prayer-widget/1732903/shafi/13/0/18.0/18.0"> </iframe>
-        <!-- <div class="col-8">
-          <q-btn icon="volume_up" />
-          <span> On </span>
-        </div>
-        <div class="col-4">
-          <div>Next prayer time: {{ nextPrayerTime }}</div>
-        </div> -->
+      <q-card class="col-8">
+        <q-card-section>
+          <q-card-title>Welcome, {{ currentUser.name }}!</q-card-title>
+          <p v-if="currentUser.location">Location: {{ currentUser.location }}</p>
+        </q-card-section>
       </q-card>
-    </div>
-    <div>
-      <q-card class="q-pa-md button" style="background-color: #f9f6f2;">
+      <br />
+      <q-card class="col-8" v-for="(prayerTime, index) in prayerTimes" :key="index">
+        <q-card-section>
+          <q-card-title>
+            {{ prayerTime.date }} ({{ prayerTime.day }})
+          </q-card-title>
+        </q-card-section>
 
+        <q-card-section>
+          <q-list>
+            <q-item v-for="(value, key) in prayerTime" :key="key">
+              <q-item-section>
+                <q-item-label>{{ key }}</q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ value }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
       </q-card>
     </div>
   </q-page>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import { getAuth } from "firebase/auth";
 
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {
-      nextPrayerTime: '',
+      prayerTimes: [],
+      currentUser: {
+        name: '', // Replace with actual user data
+      },
     };
   },
   async created() {
-    // Assuming you have a function called `getPrayerTime`
-    // that takes state and district as parameters and returns the next prayer time
-    const state = 'Selangor'; // Replace this with the desired state
-    const district = 'SGR01'; // Replace this with the desired district
-    this.nextPrayerTime = await this.getPrayerTime(state, district);
+    try {
+      // Check if the user is logged in
+      const auth = getAuth();
+      if (!auth.currentUser) {
+        this.$router.push('/');
+      } else {
+        // Fetch and set user data
+        const user = auth.currentUser.email;
+        this.currentUser.name = user; // Replace with the actual property used to store the user's name
+        console.log("User:", this.currentUser.name);
+      }
+    } catch (error) {
+      console.error("Error during authentication:", error);
+      // Handle error (e.g., redirect to an error page)
+    }
+  },
+  mounted() {
+    this.fetchPrayerTimes();
   },
   methods: {
-    async getPrayerTime(state, district) {
-      // Replace this URL with the appropriate API endpoint or data source for prayer times
-      const apiUrl = `https://waktu-solat4.p.rapidapi.com/solat/list?state=${state}&district=${district}`;
+    async fetchPrayerTimes() {
       try {
-        const response = await axios.get(apiUrl);
-        // Assuming the API response contains the next prayer time in the desired format
-        return response.data.nextPrayerTime;
+        const response = await axios.get('http://localhost:3000/solat');
+        const today = new Date();
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = months[today.getMonth()];
+        const year = today.getFullYear();
+
+        const formattedDate = `${day}-${month}-${year}`;
+
+        console.log("hihi", formattedDate);
+
+        // Filter prayer times for the current date
+        const filteredPrayerTimes = response.data[0].prayerTime.filter(prayerTime => prayerTime.date === formattedDate);
+
+        this.prayerTimes = filteredPrayerTimes;
+        console.log('Prayer times:', filteredPrayerTimes);
       } catch (error) {
-        console.error(error);
-        return 'Error fetching prayer time'; // Handle the error gracefully
+        console.error('Error fetching prayer times:', error);
       }
     },
   },

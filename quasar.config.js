@@ -23,8 +23,9 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
     boot: [
-      
+
       'axios',
+      'firebase',
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
@@ -69,9 +70,9 @@ module.exports = configure(function (ctx) {
 
       // https://v2.quasar.dev/quasar-cli-webpack/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      
-      chainWebpack (/* chain */) {}
-      
+
+      chainWebpack(/* chain */) { }
+
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-devServer
@@ -80,12 +81,23 @@ module.exports = configure(function (ctx) {
         type: 'http'
       },
       port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      proxy: {
+        '/solat': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/solat': ''
+          }
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework
     framework: {
-      config: {},
+      config: {
+        notify: { /* look at QuasarConfOptions from the API card */ }
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
@@ -98,7 +110,9 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+      ]
     },
 
     // animations: 'all', // --- includes all animations
@@ -113,14 +127,14 @@ module.exports = configure(function (ctx) {
       // manualPostHydrationTrigger: true,
 
       prodPort: 3000, // The default port that the production server should use
-                      // (gets superseded if process.env.PORT is specified at runtime)
+      // (gets superseded if process.env.PORT is specified at runtime)
 
       maxAge: 1000 * 60 * 60 * 24 * 30,
-        // Tell browser when a file from the server should expire from cache (in ms)
+      // Tell browser when a file from the server should expire from cache (in ms)
 
-      
-      chainWebpackWebserver (/* chain */) {},
-      
+
+      chainWebpackWebserver(/* chain */) { },
+
 
       middlewares: [
         ctx.prod ? 'compression' : '',
@@ -135,9 +149,9 @@ module.exports = configure(function (ctx) {
 
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode
-      
-      chainWebpackCustomSW (/* chain */) {},
-      
+
+      chainWebpackCustomSW(/* chain */) { },
+
 
       manifest: {
         name: `Raudah Islamic`,
@@ -211,13 +225,13 @@ module.exports = configure(function (ctx) {
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      
-      chainWebpackMain (/* chain */) {},
-      
 
-      
-      chainWebpackPreload (/* chain */) {},
-      
+      chainWebpackMain(/* chain */) { },
+
+
+
+      chainWebpackPreload(/* chain */) { },
+
     }
   }
 });
