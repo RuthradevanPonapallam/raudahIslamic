@@ -1,10 +1,16 @@
 <template>
-    <q-form @submit.prevent="login">
-        <q-input type="email" v-model="email" label="Email" />
-        <q-input type="password" v-model="password" label="Password" />
-        <q-btn type="submit" label="Login" />
-    </q-form>
-    <q-btn label="Don't have an account? Register now" @click="$router.push('/home')" />
+    <div class="login-container">
+        <img src="~assets/icons/1.jpg" alt="Logo" class="logo" />
+        <q-form @submit.prevent="login" class="login-form">
+            <q-input class="q-pa-sm" type="email" v-model="email" label="Email" outlined />
+            <q-input class="q-pa-sm" type="password" v-model="password" label="Password" outlined />
+            <q-btn type="submit" label="Login" class="login-btn" color="primary" dense />
+        </q-form>
+        <div class="register-link">
+            <q-btn no-caps label="Don't have an account? Register now" @click="$router.push('/register')" color="primary"
+                flat dense />
+        </div>
+    </div>
 </template>
   
 <script>
@@ -64,3 +70,39 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.logo {
+    max-width: 250px;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    width: 80%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.q-input {
+    width: 100%;
+}
+
+.login-btn {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.register-link {
+    margin-top: 20px;
+}
+</style>
