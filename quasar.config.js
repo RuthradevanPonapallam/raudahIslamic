@@ -50,7 +50,8 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
-
+      // htmlFilename: 'index.html',
+      // distDir: 'src-capacitor/www',
       // transpile: false,
       // publicPath: '/',
 
@@ -62,7 +63,7 @@ module.exports = configure(function (ctx) {
       // rtl: true, // https://quasar.dev/options/rtl-support
       // preloadChunks: true,
       // showProgress: false,
-      // gzip: true,
+      gzip: false,
       // analyze: true,
 
       // Options below are automatically set depending on the env, set them if you want to override
@@ -82,15 +83,15 @@ module.exports = configure(function (ctx) {
       },
       port: 8080,
       open: true, // opens browser window automatically
-      proxy: {
-        '/solat': {
-          target: 'http://localhost:3000',
-          changeOrigin: true,
-          pathRewrite: {
-            '^/solat': ''
-          }
-        }
-      }
+      // proxy: {
+      //   '/solat': {
+      //     target: 'http://localhost:3000',
+      //     changeOrigin: true,
+      //     pathRewrite: {
+      //       '^/solat': ''
+      //     }
+      //   }
+      // }
     },
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework

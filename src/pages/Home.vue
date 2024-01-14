@@ -11,7 +11,7 @@
       <q-card class="col-8" v-for="(prayerTime, index) in prayerTimes" :key="index">
         <q-card-section>
           <q-card-title>
-            {{ prayerTime.date }} ({{ prayerTime.day }})
+            {{ prayerTime.Date }} ({{ prayerTime.Day }})
           </q-card-title>
         </q-card-section>
 
@@ -64,31 +64,88 @@ export default {
     }
   },
   mounted() {
-    this.fetchPrayerTimes();
+    // this.fetchPrayerTimes();
+    this.calculatePrayerTimes();
   },
+  // methods: {
+  //   // fetchPrayerTimes() {
+  //   //   // Dummy data for presentation purposes
+  //   //   const dummyData = [
+  //   //     {
+  //   //       date: "14-Jan-2024",
+  //   //       day: "Mon",
+  //   //       Fajr: "5:30 AM",
+  //   //       Dhuhr: "12:00 PM",
+  //   //       Asr: "3:30 PM",
+  //   //       Maghrib: "6:00 PM",
+  //   //       Isha: "8:30 PM",
+  //   //     },
+  //   //   ];
+  //   //   this.prayerTimes = dummyData;
+  //   // },
+  //   calculatePrayerTimes() {
+  //     const today = new Date();
+  //     const coordinates = [37.7749, -122.4194]; // Hardcoded coordinates for San Francisco, CA
+  //     const method = 'Basic'; // Use a basic method (you may need to implement the calculation logic)
+
+  //     const prayerTimes = this.calculatePrayerTimesBasic(today, coordinates, method);
+
+  //     // Format the prayer times as needed
+  //     const formattedPrayerTimes = Object.entries(prayerTimes).map(([key, value]) => ({
+  //       prayerName: key,
+  //       time: value,
+  //     }));
+
+  //     this.prayerTimes = formattedPrayerTimes;
+  //   },
+  //   calculatePrayerTimesBasic(date, coordinates, method) {
+  //     // Implement your basic calculation logic here
+  //     // You may need to use mathematical formulas based on the desired method
+  //     // For demonstration purposes, consider providing dummy values
+
+  //     const dummyPrayerTimes = {
+  //       Fajr: '5:30 AM',
+  //       Dhuhr: '12:00 PM',
+  //       Asr: '3:30 PM',
+  //       Maghrib: '6:00 PM',
+  //       Isha: '8:30 PM',
+  //     };
+
+  //     return dummyPrayerTimes;
+  //   },
+  // },
   methods: {
-    async fetchPrayerTimes() {
-      try {
-        const response = await axios.get('http://localhost:3000/solat');
-        const today = new Date();
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    calculatePrayerTimes() {
+      const today = new Date();
+      const coordinates = [37.7749, -122.4194]; // Hardcoded coordinates for San Francisco, CA
+      const method = 'Basic'; // Use a basic method (you may need to implement the calculation logic)
 
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = months[today.getMonth()];
-        const year = today.getFullYear();
+      const prayerTimes = this.calculatePrayerTimesBasic(today, coordinates, method);
 
-        const formattedDate = `${day}-${month}-${year}`;
+      // Format the prayer times as needed
+      const formattedPrayerTimes = {
+        Date: '14-Jan-2024', // Replace with the actual date
+        Day: 'Monday', // Replace with the actual day
+        ...prayerTimes,
+      };
 
-        console.log("hihi", formattedDate);
+      this.currentUser.location = 'Shah Alam, Selangor'; // Replace with the actual location
+      this.prayerTimes.push(formattedPrayerTimes);
+    },
+    calculatePrayerTimesBasic(date, coordinates, method) {
+      // Implement your basic calculation logic here
+      // You may need to use mathematical formulas based on the desired method
+      // For demonstration purposes, consider providing dummy values
 
-        // Filter prayer times for the current date
-        const filteredPrayerTimes = response.data[0].prayerTime.filter(prayerTime => prayerTime.date === formattedDate);
+      const dummyPrayerTimes = {
+        Fajr: '5:30 AM',
+        Dhuhr: '12:00 PM',
+        Asr: '3:30 PM',
+        Maghrib: '6:00 PM',
+        Isha: '8:30 PM',
+      };
 
-        this.prayerTimes = filteredPrayerTimes;
-        console.log('Prayer times:', filteredPrayerTimes);
-      } catch (error) {
-        console.error('Error fetching prayer times:', error);
-      }
+      return dummyPrayerTimes;
     },
   },
 };

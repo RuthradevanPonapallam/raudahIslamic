@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "186126529540",
+    "project_id": "raudahislamic-de28b",
+    "storage_bucket": "raudahislamic-de28b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:186126529540:android:a7fcca4cf3611ae3e93151",
+        "android_client_info": {
+          "package_name": "com.raudahIslamic.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmN8m6syNHsyMV38gSmxV5K6WfwRSsGpk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
