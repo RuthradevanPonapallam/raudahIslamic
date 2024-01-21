@@ -49,7 +49,6 @@ export default defineComponent({
       tab: ref('Home')
     }
   },
-
   mounted() {
     const currentDate = new Date();
 
@@ -81,7 +80,6 @@ export default defineComponent({
     document.getElementById('time-and-date').innerHTML = formatDate(currentDate);
     document.getElementById('islam-date').innerHTML = IslamicDate(currentDate);
   },
-
   methods: {
     openQuranPage() {
       this.$router.push('/quran');

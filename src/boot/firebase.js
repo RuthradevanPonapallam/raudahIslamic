@@ -1,5 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { browserLocalPersistence } from 'firebase/auth';
+import { collection, getFirestore } from 'firebase/firestore';
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyDxcHUuCR5Zrc7J1wDej4r07HIcEcPmTxs",
@@ -19,7 +22,12 @@ try {
 }
 
 const auth = getAuth(app);
-// Set persistence to LOCAL
-setPersistence(auth, browserLocalPersistence);
 
-export { app, auth };
+// Access Firestore
+const db = getFirestore(app);
+// const videosCollection = collection(db, 'guides');
+
+// Set persistence to LOCAL
+getAuth(app).setPersistence(browserLocalPersistence);
+
+export { app, auth, db };
