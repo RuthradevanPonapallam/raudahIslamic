@@ -23,12 +23,12 @@ export default {
             password: ''
         };
     },
-    // created() {
-    //     const auth = getAuth();
-    //     if (auth.currentUser) {
-    //         this.$router.push('/home');
-    //     }
-    // },
+    created() {
+        const auth = getAuth();
+        if (auth.currentUser) {
+            this.$router.push('/home');
+        }
+    },
     methods: {
         async login() {
             try {
@@ -40,9 +40,6 @@ export default {
 
                 console.log("User signed in:", user);
                 // Redirect or perform actions after successful login
-
-                // Save user's authentication state in localStorage
-                localStorage.setItem('user', JSON.stringify(user));
 
                 // Display success notification
                 this.$q.notify({

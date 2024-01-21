@@ -12,7 +12,7 @@
                         <q-img class="rounded-borders" src="\images\tasbih.png" style="height: 300px; width: 300px;" />
                     </q-card-section>
                     <q-card-actions class="flex flex-center">
-                        <q-btn @click="increment" class="button" label="Increment"></q-btn>
+                        <q-btn @click="increment" class="button text-primary" label="Increment"></q-btn>
                         <q-btn @click="reset" class="button" color="primary" label="Reset"></q-btn>
                     </q-card-actions>
                 </q-card-section>

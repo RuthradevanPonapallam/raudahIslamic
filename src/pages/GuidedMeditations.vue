@@ -1,11 +1,12 @@
 <template>
-    <q-page class="flex flex-center">
+    <q-page class="text-primary flex flex-center">
         <div class="q-pa-md row items-start q-gutter-md">
-            <q-card v-for="(video, index) in videos" :key="index" class="my-card q-pa-md" flat bordered>
+            <q-card v-for="(video, index) in videos" :key="index" class="my-card q-pa-md" flat bordered
+                style="background-image:url('images/background3.jpg'); background-size: cover;">
                 <q-card-section horizontal>
                     <q-card-section style="min-width: 100px;" class="q-pt-xs">
-                        <div class="text-overline">{{ video.category }}</div>
-                        <div class="text-h5 q-mt-sm q-mb-xs">{{ video.title }}</div>
+                        <div class="text-overline text-bold">{{ video.category }}</div>
+                        <div class="text-h5 q-mt-sm q-mb-xs text-bold">{{ video.title }}</div>
                         <iframe :ratio="16 / 9" :src="video.url" title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen></iframe>

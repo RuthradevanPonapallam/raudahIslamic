@@ -1,9 +1,11 @@
 <template>
     <q-page class="flex flex-center">
-        <q-card v-for="quran in qurans" :key="quran.number" class="q-ma-sm">
+        <q-card v-for="quran in qurans" :key="quran.number" class="q-ma-sm"
+            style="background-image:url('images/background3.jpg'); background-size: cover; max-width: 500px;">
             <q-card-section class="text-primary">
                 <div class="text-h6">{{ quran.asma.en.short }}</div>
-                <q-expansion-item expand-separator :label="quran.asma.en.long">
+                <div class="text-h6">{{ quran.asma.ar.short }}</div>
+                <q-expansion-item expand-separator :label="quran.asma.en.long" style="max-width: fit-content;">
                     <q-card>
                         <q-card-section>
                             <div class="text-subtitle2">{{ quran.tafsir.id }}</div>
@@ -38,6 +40,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.qurans = data.data;
+                    console.log(this.qurans);
                 })
                 .catch(error => {
                     console.error('Error fetching Quran data:', error);

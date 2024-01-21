@@ -1,14 +1,15 @@
 <template>
   <q-page class="q-pa-md">
     <div class="q-py-md">
-      <q-card class="col-8">
+      <q-card style="background-image:url('images/background3.jpg'); background-size: cover;" bordered class="col-8">
         <q-card-section>
-          <q-card-title>Welcome, {{ currentUser.name }}!</q-card-title>
-          <p v-if="currentUser.location">Location: {{ currentUser.location }}</p>
+          <q-card-title class="text-bold text-primary">Welcome, {{ currentUser.name }}!</q-card-title>
+          <p class="text-bold text-primary" v-if="currentUser.location">Location: {{ currentUser.location }}</p>
         </q-card-section>
       </q-card>
       <br />
-      <q-card class="col-8" v-for="(prayerTime, index) in prayerTimes" :key="index">
+      <q-card bordered style="background-image:url('images/background3.jpg'); background-size: cover;"
+        class="col-8 text-bold text-primary" v-for="(prayerTime, index) in prayerTimes" :key="index">
         <q-card-section>
           <q-card-title>
             {{ prayerTime.Date }} ({{ prayerTime.Day }})

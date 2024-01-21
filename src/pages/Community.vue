@@ -1,5 +1,5 @@
 <template>
-    <q-page class="flex flex-center">
+    <q-page class="text-primary flex flex-center">
         <div class="q-pa-md row items-start q-gutter-md">
             <q-card class="my-card" flat bordered>
                 <q-card-section vertical>
@@ -31,8 +31,8 @@
                 <q-card-section vertical>
                     <q-card-section class="q-pt-xs">
                         <div class="text-overline">Community Forum</div>
-                        <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
-                        <div class="text-caption text-grey">
+                        <div class="text-h5 q-mt-sm q-mb-xs text-bold">Title</div>
+                        <div class="text-caption text-primary">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua.
                         </div>
