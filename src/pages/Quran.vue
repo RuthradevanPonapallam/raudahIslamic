@@ -12,7 +12,7 @@
                         </q-card-section>
                     </q-card>
                 </q-expansion-item>
-                <audio class="q-my-sm" controls :src="quran.recitation.full"></audio>
+                <audio class="q-my-sm" controls :src="convertToHttps(quran.recitation.full)"></audio>
             </q-card-section>
         </q-card>
     </q-page>
@@ -29,11 +29,12 @@ export default {
         this.fetchQurans();
     },
     methods: {
-        play() {
-            this.$refs.audioPlayer.play();
-        },
-        pause() {
-            this.$refs.audioPlayer.pause();
+        // Function to convert HTTP to HTTPS
+        convertToHttps(url) {
+            if (url.startsWith('http://')) {
+                return 'https://' + url.slice(7);
+            }
+            return url;
         },
         fetchQurans() {
             fetch('https://quran-endpoint.vercel.app/quran')

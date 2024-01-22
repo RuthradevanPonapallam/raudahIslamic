@@ -93,25 +93,31 @@ export default {
         },
         addGuide() {
             const userID = auth.currentUser.uid;
-            addDoc(collection(db, 'users', userID, 'guides'), this.newGuide)
-                .then(() => {
-                    // Handle success
-                    this.$q.notify({
-                        message: "Guide added successfully!",
-                        color: "positive",
-                        position: "top",
+            const embeddedURL = this.convertToEmbeddedLink(this.newGuide.url);
+
+            if (embeddedURL) {
+                this.newGuide.url = embeddedURL;
+
+                addDoc(collection(db, 'users', userID, 'guides'), this.newGuide)
+                    .then(() => {
+                        // Handle success
+                        this.$q.notify({
+                            message: "Guide added successfully!",
+                            color: "positive",
+                            position: "top",
+                        });
+                        this.cancelAddDialog();
+                        this.fetchGuides();
+                    })
+                    .catch((error) => {
+                        // Handle error
+                        this.$q.notify({
+                            message: "Error adding guide!",
+                            color: "negative",
+                            position: "top",
+                        });
                     });
-                    this.cancelAddDialog();
-                    this.fetchGuides();
-                })
-                .catch((error) => {
-                    // Handle error
-                    this.$q.notify({
-                        message: "Error adding guide!",
-                        color: "negative",
-                        position: "top",
-                    });
-                });
+            }
         },
         editGuide(index) {
             // Set data of the selected guide to the newGuide object
@@ -153,30 +159,49 @@ export default {
         },
         saveChanges() {
             const userID = auth.currentUser.uid;
-            // Get the index of the edited guide in the videos array
-            const index = this.videos.findIndex((video) => video.id === this.newGuide.id);
+            const embeddedURL = this.convertToEmbeddedLink(this.newGuide.url);
+            if (embeddedURL) {
+                this.newGuide.url = embeddedURL;
+                // Get the index of the edited guide in the videos array
+                const index = this.videos.findIndex((video) => video.id === this.newGuide.id);
 
-            // Update the guide document in Firestore
-            const docRef = doc(db, 'users', userID, 'guides', this.newGuide.id);
-            updateDoc(docRef, this.newGuide)
-                .then(() => {
-                    // Handle success
-                    this.$q.notify({
-                        message: "Guide updated successfully!",
-                        color: "positive",
-                        position: "top",
+                // Update the guide document in Firestore
+                const docRef = doc(db, 'users', userID, 'guides', this.newGuide.id);
+                updateDoc(docRef, this.newGuide)
+                    .then(() => {
+                        // Handle success
+                        this.$q.notify({
+                            message: "Guide updated successfully!",
+                            color: "positive",
+                            position: "top",
+                        });
+                        this.editDialog = false;
+                        this.fetchGuides(); // Refresh the list
+                    })
+                    .catch((error) => {
+                        // Handle error
+                        this.$q.notify({
+                            message: "Error updating guide!",
+                            color: "negative",
+                            position: "top",
+                        });
                     });
-                    this.editDialog = false;
-                    this.fetchGuides(); // Refresh the list
-                })
-                .catch((error) => {
-                    // Handle error
-                    this.$q.notify({
-                        message: "Error updating guide!",
-                        color: "negative",
-                        position: "top",
-                    });
+            }
+        },
+        convertToEmbeddedLink(normalLink) {
+            const regexNormalLink = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+
+            if (regexNormalLink.test(normalLink)) {
+                const videoID = normalLink.match(regexNormalLink)[1];
+                return `https://www.youtube.com/embed/${videoID}`;
+            } else {
+                this.$q.notify({
+                    message: "Invalid YouTube URL",
+                    color: "negative",
+                    position: "top",
                 });
+                return null;
+            }
         },
         fetchGuides() {
             const userID = auth.currentUser.uid;

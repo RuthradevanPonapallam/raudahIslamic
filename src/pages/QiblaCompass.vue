@@ -19,6 +19,7 @@
                     Qibla: {{ qiblaDirection }}°
                 </div> -->
             </div>
+            <q-btn @click="findQibla" class="q-mt-lg" color="primary" label="Find Qibla" />
         </div>
     </q-page>
 </template>
@@ -37,9 +38,8 @@ export default {
             qiblaDirection: 0, // Default Qibla direction
         };
     },
-    mounted() {
+    created() {
         this.getLocation();
-        this.calculateQiblaDirection();
     },
     methods: {
         async getLocation() {
@@ -50,6 +50,10 @@ export default {
             } catch (error) {
                 console.log("Error getting location:", error);
             }
+        },
+        findQibla() {
+            this.getLocation();
+            this.calculateQiblaDirection();
         },
         calculateQiblaDirection() {
             // Replace the following coordinates with the coordinates of the Kaaba in Mecca
