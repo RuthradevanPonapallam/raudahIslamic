@@ -15,6 +15,7 @@
   
 <script>
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { PushNotifications } from '@capacitor/push-notifications';
 
 export default {
     data() {
@@ -28,6 +29,20 @@ export default {
         if (auth.currentUser) {
             this.$router.push('/home');
         }
+    },
+    mounted() {
+        // this.$q.notify({
+        //     message: "Welcome to the Muslim Meditation App!",
+        //     color: "positive",
+        //     position: "top",
+        // });
+
+        // PushNotifications.requestPermissions().then((permission) => {
+        //     console.log('Permission granted:', permission);
+        // });
+        // PushNotifications.addListener('registration', token => {
+        //     console.info('Registration token: ', token.value);
+        // });
     },
     methods: {
         async login() {

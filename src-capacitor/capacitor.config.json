@@ -5,7 +5,8 @@
   "npmClient": "[object Object]",
   "webDir": "www",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "url": "http://192.168.0.105:8080"
   },
   "plugins": {
     "SplashScreen": {
@@ -30,6 +31,13 @@
         "sound",
         "alert"
       ]
+    },
+    "plugins": {
+      "LocalNotifications": {
+        "smallIcon": "ic_stat_icon_config_sample",
+        "iconColor": "#488AFF",
+        "sound": "beep.wav"
+      }
     }
   }
 }

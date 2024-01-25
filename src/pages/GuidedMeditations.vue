@@ -2,12 +2,14 @@
     <q-page class="text-primary flex flex-center">
         <div class="q-pa-md row items-start q-gutter-md">
             <!-- Add Button -->
-            <q-btn @click="showAddDialog" color="primary" label="Add Guide" icon="add" />
+            <q-btn v-if="allowAdd" @click="showAddDialog" color="primary" label="Add Guide" icon="add" />
             <!-- Video Cards -->
             <q-card v-for="(video, index) in videos" :key="index" class="my-card q-pa-md" flat bordered
                 style="background-image:url('images/background3.jpg'); background-size: cover;">
-                <q-btn size="sm" class="float-right q-ml-xs" @click="editGuide(index)" color="primary" icon="edit" />
-                <q-btn size="sm" class="float-right" @click="deleteGuide(index)" color="negative" icon="delete" />
+                <q-btn v-if="allowEdit" size="sm" class="float-right q-ml-xs" @click="editGuide(index)" color="primary"
+                    icon="edit" />
+                <q-btn v-if="allowDelete" size="sm" class="float-right" @click="deleteGuide(index)" color="negative"
+                    icon="delete" />
                 <q-card-section horizontal>
                     <q-card-section style="min-width: 100px;" class="q-pt-xs">
                         <div class="text-overline text-bold">{{ video.category }}</div>
@@ -67,6 +69,9 @@ export default {
             videos: [],
             addDialog: false,
             editDialog: false,
+            allowAdd: false,
+            allowEdit: false,
+            allowDelete: false,
             newGuide: {
                 category: '',
                 title: '',
@@ -213,6 +218,16 @@ export default {
                     }));
                     this.videos = fetchedGuides;
                     console.log("Data", this.videos)  // Update the videos array with fetched data
+
+                    // Fetch User Permissions
+                    return getDocs(collection(db, 'users', userID, 'userPermission'));
+                })
+                .then((querySnapshot) => {
+                    const permissionData = querySnapshot.docs[0].data();
+                    this.allowAdd = permissionData.allowAdd;
+                    this.allowEdit = permissionData.allowEdit;
+                    this.allowDelete = permissionData.allowDelete;
+                    console.log("Permissions", permissionData)
                 })
                 .catch((error) => {
                     // Handle error

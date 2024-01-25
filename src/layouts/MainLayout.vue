@@ -28,7 +28,7 @@
         <q-tab @click="$router.push('/Community')" name="Community">
           <img class="q-pa-xs" src="~assets/icons/community.png" style="max-width: 45px;">
         </q-tab>
-        <q-tab name="/">
+        <q-tab @click="$router.push('/settings')" name="settings">
           <img class="q-pa-xs" src="~assets/icons/setting.png" style="max-width: 45px;">
         </q-tab>
       </q-tabs>
@@ -40,14 +40,23 @@
 import { defineComponent, ref } from 'vue'
 import { getAuth, signOut } from "firebase/auth";
 import { PushNotifications } from '@capacitor/push-notifications';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup() {
     return {
-      tab: ref('Home')
+      tab: ref('Home'),
     }
+  },
+  created() {
+    this.setupPushNotification();
+    this.sendMotivationalNotification();
+
+    // setInterval(() => {
+    //   this.sendMotivationalNotification();
+    // }, 5000);
   },
   mounted() {
     const currentDate = new Date();
@@ -100,6 +109,66 @@ export default defineComponent({
         console.log(error);
       });
     },
+    async setupPushNotification() {
+      let permStatus = await PushNotifications.checkPermissions();
+      if (permStatus.receive === "prompt") {
+        permStatus = await PushNotifications.requestPermissions();
+      }
+      if (permStatus.receive !== "granted") {
+        throw new Error("User denied permissions!");
+      }
+      await PushNotifications.register();
+      // On success, we should be able to receive notifications
+      await PushNotifications.addListener("registration", (token) => {
+        console.log("Push registration success, token: " + token.value);
+      });
+
+      await PushNotifications.addListener('pushNotificationReceived', notification => {
+        console.log('Push notification received: ', notification);
+      });
+    },
+    sendMotivationalNotification() {
+      try {
+        const notifications = [
+          {
+            title: 'Motivational Notification 1',
+            body: 'This is the first motivational notification!',
+            id: 1,
+            sound: 'null',
+            vibrate: true,
+            // Add other options as needed
+            schedule: { at: new Date(Date.now() + 10000) } // Schedule after 10 seconds
+          },
+          {
+            title: 'Motivational Notification 2',
+            body: 'This is the second motivational notification!',
+            id: 2,
+            sound: 'null',
+            vibrate: true,
+            // Add other options as needed
+            schedule: { at: new Date(Date.now() + 30000) } // Schedule after 30 seconds
+          },
+          {
+            title: 'Motivational Notification 3',
+            body: 'This is the third motivational notification!',
+            id: 3,
+            sound: 'null',
+            vibrate: true,
+            // Add other options as needed
+            schedule: { at: new Date(Date.now() + 60000) } // Schedule after 1 minute
+          },
+        ];
+
+        // Schedule the notifications
+        LocalNotifications.schedule({
+          notifications,
+        });
+
+        console.log("Notification scheduled successfully");
+      } catch (error) {
+        console.error("Failed to schedule notification", error);
+      }
+    }
   },
 })
 </script>

@@ -60,6 +60,14 @@ const routes = [
     children: [
       { path: '', component: () => import('src/pages/Dkhir.vue') },
     ]
+  },
+
+  {
+    path: '/Settings',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('src/pages/Settings.vue') },
+    ]
   }
 ]
 
